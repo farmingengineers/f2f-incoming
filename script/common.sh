@@ -1,1 +1,1 @@
-export GOPATH=${APPROOT}/.go
+export GOPATH=${APPROOT}

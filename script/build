@@ -7,4 +7,4 @@ APPROOT=`dirname $0`/..
 
 cd ${APPROOT}
 echo Building f2f-incoming...
-go build -o f2f-incoming
+go get
