@@ -1,0 +1,10 @@
+#!/bin/sh
+
+set -e
+
+APPROOT=`dirname $0`/..
+. ${APPROOT}/script/common.sh
+
+cd ${APPROOT}
+echo Building f2f-incoming...
+go build -o f2f-incoming
