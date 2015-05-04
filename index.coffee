@@ -9,7 +9,7 @@ app = express()
 
 # Send anyone else to the main website.
 app.get '*', (request, response) ->
-  response.redirect 301, "https://www.farmtoforkmarket.org"
+  response.redirect 301, "http://www.farmtoforkmarket.org"
 
 app.listen config.port, ->
   console.log "App is running on port #{config.port}"
