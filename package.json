@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "express": "4.12.3",
+    "coffee-script": "1.9.2"
+  },
+  "license": "MIT"
+}
