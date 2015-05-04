@@ -1,0 +1,10 @@
+#!/bin/sh
+
+set -e
+
+if which jq >/dev/null 2>&1; then
+  for f in app.json package.json; do
+    echo ${f}
+    jq -r '"... ok"' < ${f}
+  done
+fi
