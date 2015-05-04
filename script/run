@@ -1,8 +1,0 @@
-#!/bin/sh
-
-set -e
-
-APPROOT=`dirname $0`/..
-. ${APPROOT}/script/common.sh
-
-go run app.go
