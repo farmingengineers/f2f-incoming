@@ -1,14 +1,11 @@
+require_relative "command"
+
 module F2fIncoming
   class Queuer
-    # Public: Enqueue a job from a postmark mail hook.
-    #
-    # Raises if there is an error, otherwise queues a job.
-    def self.enqueue!(request_params)
-      new.enqueue(request_params)
-    end
+    include Command
 
-    # Internal.
-    def enqueue(request_params)
+    # Public: Enqueue an email for conversion.
+    def enqueue_conversion(raw_mail)
       # todo - test drive this
     end
   end

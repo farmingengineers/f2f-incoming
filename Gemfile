@@ -4,6 +4,7 @@ ruby "2.2.0"
 
 group :web do
   gem "sinatra"
+  gem "json"
 end
 
 group :worker do
