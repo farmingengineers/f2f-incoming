@@ -1,9 +1,0 @@
-{
-  "name": "Farm to Fork Newsletter Processor",
-  "description": "Converts email newsletters into gh-pages pull requests",
-  "repository": "https://github.com/farmingengineers/f2f-incoming",
-  "website": "http://convert-newsletters.farmtoforkmarket.org/",
-  "env": {
-    "WEBHOOK_SECRET_PATH": { "generator": "secret" }
-  }
-}

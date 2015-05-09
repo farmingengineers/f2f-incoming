@@ -1,1 +1,1 @@
-web: coffee index.coffee
+web: bundle exec rackup -p $PORT config.ru
