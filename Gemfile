@@ -11,3 +11,8 @@ group :worker do
   gem "mail"
   gem "nokogiri"
 end
+
+group :test do
+  gem "rake"
+  gem "rspec"
+end
