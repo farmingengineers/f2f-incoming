@@ -8,5 +8,6 @@ rescue LoadError
 end
 
 task :hookurl do
-  puts "Hook URL is http://convert-newsletters.farmtoforkmarket.org/#{ENV["WEBHOOK_SECRET_PATH"] || "incoming"}"
+  require_relative "app"
+  puts "Hook URL is http://convert-newsletters.farmtoforkmarket.org/#{F2fIncomingApp.hook_path}"
 end

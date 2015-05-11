@@ -7,6 +7,7 @@ group :web do
 
   gem "activesupport"
   gem "json"
+  gem "scrolls"
 end
 
 group :worker do
