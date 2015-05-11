@@ -1,6 +1,8 @@
 require "sinatra/base"
 
-require_relative "lib/f2f-incoming/postmark_receiver"
+require "json"
+
+require_relative "lib/f2f-incoming/postmark_mail"
 require_relative "lib/f2f-incoming/queuer"
 
 class F2fIncomingApp < Sinatra::Base
