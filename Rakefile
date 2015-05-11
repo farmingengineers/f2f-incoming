@@ -6,3 +6,7 @@ begin
 rescue LoadError
   # heroku doesn't have rspec
 end
+
+task :hookurl do
+  puts "Hook URL is http://convert-newsletters.farmtoforkmarket.org/#{ENV["WEBHOOK_SECRET_PATH"] || "incoming"}"
+end
