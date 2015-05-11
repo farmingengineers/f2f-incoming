@@ -15,6 +15,10 @@ group :worker do
   gem "nokogiri"
 end
 
+group :production do
+  gem "thin"
+end
+
 group :development do
   gem "shotgun"
 end
