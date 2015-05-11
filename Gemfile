@@ -4,6 +4,8 @@ ruby "2.2.0"
 
 group :web do
   gem "sinatra"
+
+  gem "activesupport"
   gem "json"
 end
 

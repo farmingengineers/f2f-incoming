@@ -6,6 +6,14 @@ module F2fIncoming
       @data = data
     end
 
+    def date
+      Time.parse @data["Date"]
+    end
+
+    def subject
+      @data["Subject"]
+    end
+
     def html
       CGI.unescapeHTML @data["HtmlBody"]
     end

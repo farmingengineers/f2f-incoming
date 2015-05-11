@@ -1,15 +1,17 @@
 require "spec_helper"
 require "json"
+require "active_support/time_with_zone"
 
 require "f2f-incoming/postmark_mail"
 
 describe F2fIncoming::PostmarkMail do
   subject { described_class.new(test_hook) }
 
-  # silly, indeed
-  it { expect(subject).to be_a(described_class) }
-
+  it { expect(subject.date).to eq(indiana.local(2015, 5, 9, 17, 31, 33)) }
+  it { expect(subject.subject).to eq("Test subject") }
   it { expect(subject.html).to eq("<html><body><p>This is a test html body.</p></body></html>") }
+
+  let(:indiana) { ActiveSupport::TimeZone["America/Indiana/Indianapolis"] }
 
   let(:test_hook) { JSON.load(test_json) }
   let(:test_json) { <<TEST }
