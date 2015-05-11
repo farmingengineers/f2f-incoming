@@ -13,7 +13,7 @@ class F2fIncomingApp < Sinatra::Base
     payload = JSON.parse(request.body.read)
     raw_mail = F2fIncoming::PostmarkMail.new(payload)
     F2fIncoming::Queuer.enqueue_conversion(raw_mail)
-    head 201
+    halt 201
   end
 
   get "/*" do
