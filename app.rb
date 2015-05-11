@@ -2,17 +2,13 @@ require "sinatra/base"
 
 require "json"
 
-require_relative "lib/f2f-incoming/postmark_mail"
-require_relative "lib/f2f-incoming/queuer"
+require_relative "lib/f2f-incoming/receive_postmark_mail"
 
 class F2fIncomingApp < Sinatra::Base
   set :hook_path, ENV["WEBHOOK_SECRET_PATH"] || "incoming"
 
   post "/#{hook_path}" do
-    request.body.rewind
-    payload = JSON.parse(request.body.read)
-    raw_mail = F2fIncoming::PostmarkMail.new(payload)
-    F2fIncoming::Queuer.enqueue_conversion(raw_mail)
+    F2fIncoming::ReceivePostmarkMail.receive(request)
     halt 201
   end
 
