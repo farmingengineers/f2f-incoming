@@ -6,7 +6,7 @@ require_relative "lib/f2f-incoming/postmark_mail"
 require_relative "lib/f2f-incoming/queuer"
 
 class F2fIncomingApp < Sinatra::Base
-  hook_path = ENV["WEBHOOK_SECRET_PATH"] || "incoming"
+  set :hook_path, ENV["WEBHOOK_SECRET_PATH"] || "incoming"
 
   post "/#{hook_path}" do
     request.body.rewind
