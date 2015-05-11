@@ -9,7 +9,7 @@ class F2fIncomingApp < Sinatra::Base
   post "/#{hook_path}" do
     request.body.rewind
     payload = JSON.parse(request.body.read)
-    raw_mail = F2fIncoming::PostmarkReceiver.extract_raw(payload)
+    raw_mail = F2fIncoming::PostmarkMail.new(payload)
     F2fIncoming::Queuer.enqueue_conversion(raw_mail)
     head 201
   end
