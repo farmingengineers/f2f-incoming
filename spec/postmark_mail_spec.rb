@@ -7,9 +7,19 @@ require "f2f-incoming/postmark_mail"
 describe F2fIncoming::PostmarkMail do
   subject { described_class.new(test_hook) }
 
+  it { expect(subject.message_id).to eq("73e6d360-66eb-11e1-8e72-a8904824019b") }
   it { expect(subject.date).to eq(indiana.local(2015, 5, 9, 17, 31, 33)) }
   it { expect(subject.subject).to eq("Test subject") }
   it { expect(subject.html).to eq("<html><body><p>This is a test html body.</p></body></html>") }
+  it { expect(subject.from).to eq("support@postmarkapp.com") }
+  it { expect(subject.raw_date).to eq("Sat, 9 May 2015 17:31:33 -0400") }
+  it { expect(subject.spam_score).to be_nil }
+
+  context "with a spam score" do
+    let(:test_hook) { super().merge("Headers" => [{"Name" => "X-Spam-Score", "Value" => "-0.1"}]) }
+
+    it { expect(subject.spam_score).to eq("-0.1") }
+  end
 
   let(:indiana) { ActiveSupport::TimeZone["America/Indiana/Indianapolis"] }
 
