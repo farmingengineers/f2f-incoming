@@ -3,4 +3,4 @@
 set -e
 
 script/bootstrap --quiet
-bin/rackup config.ru
+bin/shotgun config.ru

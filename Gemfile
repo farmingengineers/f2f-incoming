@@ -15,6 +15,10 @@ group :worker do
   gem "nokogiri"
 end
 
+group :development do
+  gem "shotgun"
+end
+
 group :test do
   gem "rake"
   gem "rspec"
