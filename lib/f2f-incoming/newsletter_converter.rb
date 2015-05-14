@@ -54,15 +54,17 @@ module F2fIncoming
     # Make it a newsletter. `git add`s what it made.
     def convert_newsletter(mail)
       load File.expand_path("_script/convert-newsletters.rb")
-      F2fConverter.new.convert_to_post(mail)
+      converter = F2fConverter.new
+      converter.convert_to_post(mail)
+      converter.git_add
     end
 
     def commit(message)
-      run! "git", "commit", "-m", message
+      run! "git", "commit", "--allow-empty", "-m", message
     end
 
     def push(branch)
-      run! "git", "push", "https://xx:#{ENV["GITHUB_TOKEN"]}@github.com/f", "HEAD:refs/heads/#{branch}"
+      run! "git", "push", "origin", "HEAD:refs/heads/#{branch}"
     end
 
     def open_pr(branch, title)

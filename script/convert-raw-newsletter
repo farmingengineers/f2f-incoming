@@ -7,12 +7,12 @@ require_relative "../lib/f2f-incoming/newsletter_converter"
 require_relative "../lib/f2f-incoming/postmark_mail"
 
 def main(raw_mail_path)
-  mailish = read_mail(raw_mail_path)
   converter = F2fIncoming::NewsletterConverter.new \
     github_token: false,
     repo_url: File.expand_path("../../f2f", File.dirname(__FILE__))
+
+  mailish = read_mail(raw_mail_path)
   converter.process(mailish)
-  converter.git_add
 end
 
 # Return something like an F2fIncoming::PostmarkMail.
@@ -21,9 +21,11 @@ def read_mail(raw_mail_path)
   postmarkish = {
     "Date" => mail.date.to_s.tap { |x| p [:date, x] },
     "Subject" => mail.subject,
-    "HtmlBody" => mail.html_part.raw_source,
+    "HtmlBody" => mail.html_part.body.decoded,
   }
   F2fIncoming::PostmarkMail.new(postmarkish)
 end
 
 main(*ARGV) if __FILE__ == $0
+
+# vim: set ft=ruby:

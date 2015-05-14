@@ -36,7 +36,7 @@ module F2fIncoming
     end
 
     def html
-      CGI.unescapeHTML @data["HtmlBody"]
+      @data["HtmlBody"]
     end
 
     def html_part
