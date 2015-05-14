@@ -1,0 +1,6 @@
+#!/bin/sh
+
+set -x
+set -e
+
+git push heroku "$@" HEAD:refs/heads/master
