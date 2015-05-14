@@ -1,7 +1,7 @@
 require_relative "command"
+require_relative "newsletter_converter"
 require_relative "postmark_mail_logger"
 require_relative "postmark_mail"
-require_relative "queuer"
 
 module F2fIncoming
   class ReceivePostmarkMail
