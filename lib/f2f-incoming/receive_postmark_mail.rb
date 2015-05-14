@@ -16,7 +16,7 @@ module F2fIncoming
       payload = JSON.parse(request.body.read)
       raw_mail = F2fIncoming::PostmarkMail.new(payload)
       @mail_logger.log(raw_mail)
-      F2fIncoming::Queuer.enqueue_conversion(raw_mail)
+      F2fIncoming::NewsletterConverter.process_async(raw_mail)
     end
   end
 end
