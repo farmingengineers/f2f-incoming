@@ -70,7 +70,8 @@ module F2fIncoming
     def open_pr(branch, title)
       if github_token
         client = Octokit::Client.new access_token: github_token
-        client.create_pull_request repo_name, "gh-pages", branch, title
+        pr = client.create_pull_request repo_name, "gh-pages", branch, title
+        Scrolls.log :at => "create_pull_request", :pr => pr.rels[:html].href
       end
     end
 
