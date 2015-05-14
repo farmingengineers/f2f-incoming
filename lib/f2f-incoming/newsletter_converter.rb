@@ -8,6 +8,15 @@ module F2fIncoming
   class NewsletterConverter
     include Command
 
+    def initialize(options = {})
+      # "owner/name"
+      @repo_name = options.fetch(:repo_name) { ENV["GITHUB_REPO_NAME"] }
+      # 40-char token.
+      @github_token = options.fetch(:github_token) { ENV["GITHUB_TOKEN"] }
+      # A URL we can clone from and push to.
+      @repo_url = options.fetch(:repo_url) { ENV["REPO_PUSH_URL"] || "https://xx:#{github_token}@github.com/#{repo_name}.git" }
+    end
+
     def process_async(mail)
       # Fork, because we load code into this process, and don't want to pollute the web process.
       fork do
@@ -24,7 +33,7 @@ module F2fIncoming
     def process(mail)
       Dir.mktmpdir do |tmpdir|
         Dir.chdir clone_f2f_repo(tmpdir) do
-          branch = "otto-#{SecureRandom.hexdigest(10)}"
+          branch = "otto-#{SecureRandom.hex(10)}"
           convert_newsletter mail
           commit mail.subject
           push branch
@@ -44,8 +53,8 @@ module F2fIncoming
 
     # Make it a newsletter. `git add`s what it made.
     def convert_newsletter(mail)
-      load File.join(site, "_script/convert-newsletters.rb")
-      Converter.new.convert(mail)
+      load File.expand_path("_script/convert-newsletters.rb")
+      F2fConverter.new.convert_to_post(mail)
     end
 
     def commit(message)
@@ -57,8 +66,10 @@ module F2fIncoming
     end
 
     def open_pr(branch, title)
-      client = Octokit::Client.new access_token: github_token
-      client.create_pull_request repo_name, "gh-pages", branch, title
+      if github_token
+        client = Octokit::Client.new access_token: github_token
+        client.create_pull_request repo_name, "gh-pages", branch, title
+      end
     end
 
     def run!(*command)
@@ -67,19 +78,6 @@ module F2fIncoming
       end
     end
 
-    # "owner/name"
-    def repo_name
-      ENV["GITHUB_REPO_NAME"]
-    end
-
-    # 40-char token.
-    def github_token
-      ENV["GITHUB_TOKEN"]
-    end
-
-    # A URL we can clone from and push to.
-    def repo_url
-      "https://xx:#{github_token}@github.com/#{repo_name}.git"
-    end
+    attr_reader :repo_name, :github_token, :repo_url
   end
 end

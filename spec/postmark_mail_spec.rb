@@ -10,7 +10,8 @@ describe F2fIncoming::PostmarkMail do
   it { expect(subject.message_id).to eq("73e6d360-66eb-11e1-8e72-a8904824019b") }
   it { expect(subject.date).to eq(indiana.local(2015, 5, 9, 17, 31, 33)) }
   it { expect(subject.subject).to eq("Test subject") }
-  it { expect(subject.html).to eq("<html><body><p>This is a test html body.</p></body></html>") }
+  it { expect(subject.html).to eq(%Q{<html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml"}) }
+  it { expect(subject.html_part.body.decoded).to eq(%Q{<html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml"}) }
   it { expect(subject.from).to eq("support@postmarkapp.com") }
   it { expect(subject.raw_date).to eq("Sat, 9 May 2015 17:31:33 -0400") }
   it { expect(subject.spam_score).to be_nil }
@@ -74,7 +75,7 @@ describe F2fIncoming::PostmarkMail do
   "MailboxHash": "SampleHash",
   "Date": "Sat, 9 May 2015 17:31:33 -0400",
   "TextBody": "This is a test text body.",
-  "HtmlBody": "&lt;html&gt;&lt;body&gt;&lt;p&gt;This is a test html body.&lt;\\/p&gt;&lt;\\/body&gt;&lt;\\/html&gt;",
+  "HtmlBody": "<html lang=\\"en\\" xml:lang=\\"en\\" xmlns=\\"http:\\/\\/www.w3.org\\/1999\\/xhtml\\"",
   "StrippedTextReply": "This is the reply text",
   "Tag": "TestTag",
   "Headers": [
