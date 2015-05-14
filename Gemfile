@@ -7,6 +7,7 @@ group :web do
 
   gem "activesupport"
   gem "json"
+  gem "octokit"
   gem "scrolls"
 end
 

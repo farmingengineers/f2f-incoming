@@ -36,7 +36,26 @@ module F2fIncoming
     end
 
     def html
-      CGI.unescapeHTML @data["HtmlBody"]
+      @data["HtmlBody"]
+    end
+
+    def html_part
+      Part.new(html)
+    end
+
+    class Part
+      def initialize(decoded)
+        @decoded = decoded
+      end
+      def body
+        Body.new(@decoded)
+      end
+    end
+    class Body
+      def initialize(decoded)
+        @decoded = decoded
+      end
+      attr_reader :decoded
     end
   end
 end

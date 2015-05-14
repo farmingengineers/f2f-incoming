@@ -7,9 +7,12 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
+    addressable (2.3.8)
     daemons (1.2.2)
     diff-lcs (1.2.5)
     eventmachine (1.0.7)
+    faraday (0.9.1)
+      multipart-post (>= 1.2, < 3)
     i18n (0.7.0)
     json (1.8.1)
     mail (2.6.3)
@@ -17,8 +20,11 @@ GEM
     mime-types (2.5)
     mini_portile (0.6.2)
     minitest (5.6.1)
+    multipart-post (2.0.0)
     nokogiri (1.6.6.2)
       mini_portile (~> 0.6.0)
+    octokit (3.8.0)
+      sawyer (~> 0.6.0, >= 0.5.3)
     rack (1.6.1)
     rack-protection (1.5.3)
       rack
@@ -36,6 +42,9 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.2.0)
     rspec-support (3.2.2)
+    sawyer (0.6.0)
+      addressable (~> 2.3.5)
+      faraday (~> 0.8, < 0.10)
     scrolls (0.3.8)
     shotgun (0.9.1)
       rack (>= 1.0)
@@ -60,6 +69,7 @@ DEPENDENCIES
   json
   mail
   nokogiri
+  octokit
   rake
   rspec
   scrolls

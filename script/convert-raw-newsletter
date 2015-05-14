@@ -1,0 +1,31 @@
+#!/usr/bin/env bundle exec ruby
+#/ Usage: script/convert-raw-newsletter <path-to-raw-mail>
+#/ Convert a raw mail ("Show Original" from gmail) to a branch in my local clone of f2f.
+
+require "mail"
+require_relative "../lib/f2f-incoming/newsletter_converter"
+require_relative "../lib/f2f-incoming/postmark_mail"
+
+def main(raw_mail_path)
+  converter = F2fIncoming::NewsletterConverter.new \
+    github_token: false,
+    repo_url: File.expand_path("../../f2f", File.dirname(__FILE__))
+
+  mailish = read_mail(raw_mail_path)
+  converter.process(mailish)
+end
+
+# Return something like an F2fIncoming::PostmarkMail.
+def read_mail(raw_mail_path)
+  mail = Mail.read(raw_mail_path)
+  postmarkish = {
+    "Date" => mail.date.to_s.tap { |x| p [:date, x] },
+    "Subject" => mail.subject,
+    "HtmlBody" => mail.html_part.body.decoded,
+  }
+  F2fIncoming::PostmarkMail.new(postmarkish)
+end
+
+main(*ARGV) if __FILE__ == $0
+
+# vim: set ft=ruby:
