@@ -1,4 +1,5 @@
 require "octokit"
+require "posix/spawn"
 require "thread"
 require "tmpdir"
 
@@ -76,8 +77,9 @@ module F2fIncoming
     end
 
     def run!(*command)
-      unless system(*command)
-        raise "#{command.join(" ")} failed!"
+      child = POSIX::Spawn::Child.new(*command)
+      unless child.success?
+        raise "#{command.join(" ")} failed!\n#{child.out}\n#{child.err}"
       end
     end
 
