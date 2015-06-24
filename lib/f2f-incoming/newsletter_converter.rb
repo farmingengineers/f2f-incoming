@@ -38,7 +38,7 @@ module F2fIncoming
           convert_newsletter mail
           commit mail.subject
           push branch
-          open_pr branch, mail.subject
+          open_pr branch, mail.subject, build_pr_body
         end
       end
     end
@@ -68,10 +68,30 @@ module F2fIncoming
       run! "git", "push", "origin", "HEAD:refs/heads/#{branch}"
     end
 
-    def open_pr(branch, title)
+    def build_pr_body
+      # git status --porcelain looks like this:
+      #
+      # M  Gemfile
+      #  M lib/f2f-incoming/newsletter_converter.rb
+      # ?? 2015-05-14-payload.json
+      #
+      # We want just the filenames, so cut -c4- skips the first three chars of each line.
+      child = run! "git status --porcelain _posts | cut -c4-"
+
+      urls = UrlGenerator.new
+      child.out.lines.map do |line|
+        urls.generate(line)
+      end.compact.join("\n")
+
+    rescue => e
+      puts e
+      nil
+    end
+
+    def open_pr(branch, title, body = nil)
       if github_token
         client = Octokit::Client.new access_token: github_token
-        pr = client.create_pull_request repo_name, "gh-pages", branch, title
+        pr = client.create_pull_request repo_name, "gh-pages", branch, title, body
         Scrolls.log :at => "create_pull_request", :pr => pr.rels[:html].href
       end
     end
@@ -81,6 +101,7 @@ module F2fIncoming
       unless child.success?
         raise "#{command.join(" ")} failed!\n#{child.out}\n#{child.err}"
       end
+      child
     end
 
     attr_reader :repo_name, :github_token, :repo_url
