@@ -4,6 +4,7 @@ require "thread"
 require "tmpdir"
 
 require_relative "command"
+require_relative "url_generator"
 
 module F2fIncoming
   class NewsletterConverter
