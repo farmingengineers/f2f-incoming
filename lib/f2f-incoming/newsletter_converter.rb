@@ -26,7 +26,7 @@ module F2fIncoming
           process(mail)
           exit! 0
         rescue => e
-          puts e
+          puts "#{e.class}: #{e}", e.backtrace
           exit! 1
         end
       end
@@ -85,7 +85,7 @@ module F2fIncoming
       end.compact.join("\n")
 
     rescue => e
-      puts e
+      puts "#{e.class}: #{e}", e.backtrace
       nil
     end
 
