@@ -37,9 +37,10 @@ module F2fIncoming
         Dir.chdir clone_f2f_repo(tmpdir) do
           branch = "otto-#{SecureRandom.hex(10)}"
           convert_newsletter mail
+          pr_body = build_pr_body
           commit mail.subject
           push branch
-          open_pr branch, mail.subject, build_pr_body
+          open_pr branch, mail.subject, pr_body
         end
       end
     end
