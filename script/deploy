@@ -3,4 +3,4 @@
 set -x
 set -e
 
-git push heroku "$@" HEAD:refs/heads/master
+git push heroku HEAD:refs/heads/master
