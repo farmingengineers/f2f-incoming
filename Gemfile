@@ -8,6 +8,7 @@ group :web do
   gem "activesupport"
   gem "json"
   gem "octokit"
+  gem "posix-spawn"
   gem "scrolls"
 end
 

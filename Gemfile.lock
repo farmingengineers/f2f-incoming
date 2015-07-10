@@ -25,6 +25,7 @@ GEM
       mini_portile (~> 0.6.0)
     octokit (3.8.0)
       sawyer (~> 0.6.0, >= 0.5.3)
+    posix-spawn (0.3.11)
     rack (1.6.1)
     rack-protection (1.5.3)
       rack
@@ -70,6 +71,7 @@ DEPENDENCIES
   mail
   nokogiri
   octokit
+  posix-spawn
   rake
   rspec
   scrolls

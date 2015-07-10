@@ -1,8 +1,10 @@
 require "octokit"
+require "posix/spawn"
 require "thread"
 require "tmpdir"
 
 require_relative "command"
+require_relative "url_generator"
 
 module F2fIncoming
   class NewsletterConverter
@@ -24,7 +26,7 @@ module F2fIncoming
           process(mail)
           exit! 0
         rescue => e
-          puts e
+          puts "#{e.class}: #{e}", e.backtrace
           exit! 1
         end
       end
@@ -35,9 +37,10 @@ module F2fIncoming
         Dir.chdir clone_f2f_repo(tmpdir) do
           branch = "otto-#{SecureRandom.hex(10)}"
           convert_newsletter mail
+          pr_body = build_pr_body
           commit mail.subject
           push branch
-          open_pr branch, mail.subject
+          open_pr branch, mail.subject, pr_body
         end
       end
     end
@@ -67,18 +70,40 @@ module F2fIncoming
       run! "git", "push", "origin", "HEAD:refs/heads/#{branch}"
     end
 
-    def open_pr(branch, title)
+    def build_pr_body
+      # git status --porcelain looks like this:
+      #
+      # M  Gemfile
+      #  M lib/f2f-incoming/newsletter_converter.rb
+      # ?? 2015-05-14-payload.json
+      #
+      # We want just the filenames, so cut -c4- skips the first three chars of each line.
+      child = run! "git status --porcelain _posts | cut -c4-"
+
+      urls = UrlGenerator.new
+      child.out.lines.map do |line|
+        urls.generate(line)
+      end.compact.join("\n")
+
+    rescue => e
+      puts "#{e.class}: #{e}", e.backtrace
+      nil
+    end
+
+    def open_pr(branch, title, body = nil)
       if github_token
         client = Octokit::Client.new access_token: github_token
-        pr = client.create_pull_request repo_name, "gh-pages", branch, title
+        pr = client.create_pull_request repo_name, "gh-pages", branch, title, body
         Scrolls.log :at => "create_pull_request", :pr => pr.rels[:html].href
       end
     end
 
     def run!(*command)
-      unless system(*command)
-        raise "#{command.join(" ")} failed!"
+      child = POSIX::Spawn::Child.new(*command)
+      unless child.success?
+        raise "#{command.join(" ")} failed!\n#{child.out}\n#{child.err}"
       end
+      child
     end
 
     attr_reader :repo_name, :github_token, :repo_url
